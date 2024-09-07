@@ -2,7 +2,7 @@
 - hosts: "{{ username }}@{{ public_ip }}"
   gather_facts: no
   vars_files:
-    - vars/user_input.yml
+    - vars/main.yml
 
   roles:
     - passwordless-authenticator

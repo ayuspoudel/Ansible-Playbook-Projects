@@ -1,2 +1,5 @@
 ---
 # vars file for passwordless-authenticator
+---
+username: ""
+password: ""
