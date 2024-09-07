@@ -1,6 +1,4 @@
-import os
 import subprocess
-from getpass import getpass
 
 def get_user_input():
     pem_file = input("Enter the PEM file location: ")
@@ -9,18 +7,17 @@ def get_user_input():
     return pem_file, username, public_ip
 
 def ssh_into_ec2(pem_file, username, public_ip):
-    ssh_command = f"ssh -i {pem_file} {username}@{public_ip}"
-    os.system(ssh_command)
+    ssh_command = ["ssh", "-i", pem_file, f"{username}@{public_ip}"]
+
+    try:
+        result = subprocess.run(ssh_command, check=True)
+        print("SSH connection established successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error connecting to EC2 instance: {e}")
 
 def main():
-    # Step 1: Get user input
     pem_file, username, public_ip = get_user_input()
-
-    # Step 2: SSH into EC2
     ssh_into_ec2(pem_file, username, public_ip)
-
-    # Step 3: Run Ansible playbook for configuring password authentication
-    subprocess.run(["ansible-playbook", "-i", f"{username}@{public_ip},", "playbook.yml"])
 
 if __name__ == "__main__":
     main()
