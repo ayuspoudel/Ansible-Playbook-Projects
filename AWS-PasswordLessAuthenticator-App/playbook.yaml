@@ -2,8 +2,7 @@
 - hosts: "{{ username }}@{{ public_ip }}"
   gather_facts: no
   vars_files:
-    - vars/main.yml
+    - vars/user_input.yml
 
-  tasks:
-    - include_role:
-        name: passwordless-authenticator
+  roles:
+    - passwordless-authenticator
