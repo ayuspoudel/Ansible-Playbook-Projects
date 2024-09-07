@@ -1,9 +1,0 @@
----
-- hosts: "{{ username }}@{{ public_ip }}"
-  gather_facts: no
-  vars:
-    username: "{{ username }}"
-    password: "{{ password }}"
-
-  roles:
-    - passwordless-authenticator
