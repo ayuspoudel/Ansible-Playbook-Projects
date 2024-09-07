@@ -7,7 +7,7 @@ def get_user_input():
     pem_file = input("Enter the PEM file location: ")
     username = input("Enter the EC2 instance username: ")
     public_ip = input("Enter the EC2 public IP: ")
-    user_password = getpass("Enter the desired password for the user: ")  # Use getpass for secure input
+    user_password = getpass("Enter the desired password for the user: ")
     return pem_file, username, public_ip, user_password
 
 def create_vars_file(pem_file, username, public_ip, user_password):
@@ -39,13 +39,8 @@ def run_ansible_playbook(pem_file, username, public_ip):
         print(f"Error running Ansible playbook: {e}")
 
 def main():
-    # Step 1: Get user input
     pem_file, username, public_ip, user_password = get_user_input()
-
-    # Step 2: Create the variables file for Ansible
     create_vars_file(pem_file, username, public_ip, user_password)
-
-    # Step 3: Run the Ansible playbook
     run_ansible_playbook(pem_file, username, public_ip)
 
 if __name__ == "__main__":
