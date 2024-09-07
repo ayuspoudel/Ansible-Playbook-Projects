@@ -17,36 +17,41 @@ def ssh_into_ec2(pem_file, username, public_ip):
         print(f"Error connecting to EC2 instance: {e}")
 
 def run_ansible_playbook(pem_file, username, public_ip, password):
-    with open('playbook.yaml', 'r') as f:
-        playbook = yaml.safe_load(f)
-
-    # Ensure that playbook is a dictionary
-    if not isinstance(playbook, dict):
-        print("Playbook YAML is not correctly formatted.")
-        return
-
-    # Update playbook with variables
-    playbook['vars'] = playbook.get('vars', {})
-    playbook['vars']['username'] = username
-    playbook['vars']['password'] = password
-
-    # Save the updated playbook to a temporary file
-    with open('playbook_temp.yaml', 'w') as f:
-        yaml.dump(playbook, f)
-
-    ansible_command = [
-        "ansible-playbook",
-        "-i", f"{username}@{public_ip},",
-        "playbook_temp.yaml",
-        "--private-key", pem_file,
-        "--ssh-common-args", "-o StrictHostKeyChecking=no"
-    ]
-
     try:
-        result = subprocess.run(ansible_command, check=True)
-        print("Ansible playbook executed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Error running Ansible playbook: {e}")
+        with open('playbook.yaml', 'r') as f:
+            playbook = yaml.safe_load(f)
+            print("Loaded playbook:", playbook)  # Debugging print
+
+        # Ensure that playbook is a dictionary
+        if not isinstance(playbook, dict):
+            print("Playbook YAML is not correctly formatted.")
+            return
+
+        # Update playbook with variables
+        playbook['vars'] = playbook.get('vars', {})
+        playbook['vars']['username'] = username
+        playbook['vars']['password'] = password
+
+        # Save the updated playbook to a temporary file
+        with open('playbook_temp.yaml', 'w') as f:
+            yaml.dump(playbook, f)
+
+        ansible_command = [
+            "ansible-playbook",
+            "-i", f"{username}@{public_ip},",
+            "playbook_temp.yaml",
+            "--private-key", pem_file,
+            "--ssh-common-args", "-o StrictHostKeyChecking=no"
+        ]
+
+        try:
+            result = subprocess.run(ansible_command, check=True)
+            print("Ansible playbook executed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Error running Ansible playbook: {e}")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 def main():
     pem_file, username, public_ip, password = get_user_input()
