@@ -1,0 +1,20 @@
+---
+# tasks file for ec2
+
+- name: Create ec2 instance
+  amazon.aws.ec2.instance:
+   name: "{{ item.name }}"
+   key_name: {{ key_name_aws }}
+   #vpc_subnet_id: we are using default vpc
+   instance_type: {{ type }} 
+   security_group: default
+   region: {{ proj3_region }}
+   aws_access_key: {{ aws_access_key }}
+   aws_secret_key: {{aws_secret_key }}
+   network:
+    assign-public-ip: true
+   image-id: {{ item.image }}
+  loop:
+    - {image: {{ ubuntu_ami }} , name: "ansible-instance-01"}
+    - {image: {{ ubuntu_ami }}, name: "ansible-instance-02"}
+    - {image: {{ amazon_linux_ami }}, name: "ansible-instance-03"}
