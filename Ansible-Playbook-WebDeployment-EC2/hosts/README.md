@@ -1,7 +1,7 @@
 ---
 
 # Ansible Playbook for WebApp Deployment on EC2 with Apache2
-
+  
 This folder contains an Ansible playbook designed to automate the deployment of a web application on an AWS EC2 instance. It includes the installation of Apache2 and deployment of the `index.html` file to the web server.
 
 ## Folder Structure
