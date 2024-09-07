@@ -1,7 +1,7 @@
 ---
 # vars file for ec2
 type: "t2.micro"
-key_name_aws: "ultimate.pem"
+key_name_aws: "ultimate"
 proj3_region: "us-east-1"
 ubuntu_ami: "ami-04b70fa74e45c3917"
 amazon_linux_ami: "ami-0182f373e66f89c85"
