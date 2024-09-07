@@ -1,0 +1,27 @@
+---
+# tasks file for passwordless_authenticator
+---
+- name: Ensure SSH Password Authentication is Enabled
+  become: yes
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: 'PasswordAuthentication yes'
+    create: yes
+  notify: Restart SSH
+
+- name: Set the user password
+  become: yes
+  user:
+    name: "{{ ec2_username }}"
+    password: "{{ password | password_hash('sha512') }}"
+
+- name: Restart SSH
+  become: yes
+  systemd:
+    name: ssh
+    state: restarted
+
+- name: Copy SSH key to EC2 instance
+  become: no
+  command: "ssh-copy-id -i {{ keypem_location }} {{ ec2_username }}@{{ public_ip }}"

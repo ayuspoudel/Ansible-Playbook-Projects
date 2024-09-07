@@ -1,0 +1,4 @@
+---
+- hosts: "{{ ec2_username }}@{{ public_ip }}"
+  roles:
+    - passwordless-authenticator
