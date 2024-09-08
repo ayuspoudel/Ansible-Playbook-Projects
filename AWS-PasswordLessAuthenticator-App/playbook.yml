@@ -1,4 +1,6 @@
 ---
-- hosts: "{{ ec2_username }}@{{ public_ip }}"
+- name: Configure EC2 for Passwordless Authentication
+  hosts: ec2
+  gather_facts: yes
   roles:
-    - passwordless-authenticator
+    - passwordless_authenticator

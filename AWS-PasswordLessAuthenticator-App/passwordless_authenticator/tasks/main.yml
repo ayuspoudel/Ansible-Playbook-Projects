@@ -1,6 +1,5 @@
 ---
 # tasks file for passwordless_authenticator
----
 - name: Ensure SSH Password Authentication is Enabled
   become: yes
   lineinfile:

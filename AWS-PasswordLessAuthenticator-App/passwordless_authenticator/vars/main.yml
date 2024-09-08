@@ -1,7 +1,1 @@
 ---
-# vars file for passwordless_authenticator
----
-keypem_location: "/path/to/your/key.pem"
-public_ip: "0.0.0.0"
-ec2_username: "ec2-user"
-password: "your_password"
