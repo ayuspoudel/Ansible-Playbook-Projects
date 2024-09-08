@@ -1,0 +1,43 @@
+---
+- name: Configure AWS CLI with existing credentials CSV file
+  hosts: localhost
+  gather_facts: no
+  vars:
+    aws_credentials_file: "/Users/ayushpoudel/Desktop/AwsKeys/rootkey - aws cli.csv"
+
+  tasks:
+    - name: Read AWS credentials CSV file
+      ansible.builtin.slurp:
+        src: "{{ aws_credentials_file }}"
+      register: credentials_file
+
+    - name: Decode AWS credentials content
+      ansible.builtin.set_fact:
+        aws_credentials_content: "{{ credentials_file['content'] | b64decode }}"
+
+    - name: Parse AWS credentials from CSV
+      ansible.builtin.set_fact:
+        aws_access_key: "{{ aws_credentials_content.split('\n')[1].split(',')[0].strip() }}"
+        aws_secret_key: "{{ aws_credentials_content.split('\n')[1].split(',')[1].strip() }}"
+        aws_region: "us-east-1"  # You can adjust this or prompt for it if needed
+
+    - name: Configure AWS CLI access key
+      ansible.builtin.shell:
+        cmd: aws configure set aws_access_key_id {{ aws_access_key }}
+    
+    - name: Configure AWS CLI secret key
+      ansible.builtin.shell:
+        cmd: aws configure set aws_secret_access_key {{ aws_secret_key }}
+    
+    - name: Configure AWS CLI region
+      ansible.builtin.shell:
+        cmd: aws configure set region {{ aws_region }}
+    
+    - name: Verify AWS CLI configuration
+      ansible.builtin.command:
+        cmd: aws sts get-caller-identity
+      register: aws_identity
+
+    - name: Show AWS CLI configuration
+      ansible.builtin.debug:
+        msg: "AWS CLI is configured. Caller Identity: {{ aws_identity.stdout }}"
