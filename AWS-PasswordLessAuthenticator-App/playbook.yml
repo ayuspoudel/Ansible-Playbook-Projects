@@ -1,6 +1,10 @@
 ---
 - name: Configure EC2 for Passwordless Authentication
   hosts: ec2
-  gather_facts: yes
+  become: yes
+  vars:
+    ec2_username: ubuntu  # Define your EC2 username here
+  vars_files:
+    - vars/user_input.yml
   roles:
     - passwordless_authenticator
